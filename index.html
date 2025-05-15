@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Splash Screen</title>
+    <style>
+        /* Reset and base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0a192f;
+            color: #ffffff;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        /* Splash container */
+        .splash-container {
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .logo {
+            font-size: 3rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            margin-bottom: 2rem;
+            color: #64ffda;
+            text-transform: uppercase;
+            opacity: 0;
+            animation: fadeIn 1.5s ease-in-out forwards;
+        }
+        
+        .tagline {
+            font-size: 1.2rem;
+            opacity: 0;
+            margin-bottom: 3rem;
+            color: #8892b0;
+            animation: fadeIn 1.5s ease-in-out 0.5s forwards;
+        }
+        
+        /* Loading animation container */
+        .loading-container {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            opacity: 0;
+            animation: fadeIn 1.5s ease-in-out 1s forwards;
+        }
+        
+        /* Orbital loader animation */
+        .orbit-loader {
+            position: relative;
+            width: 80px;
+            height: 80px;
+        }
+        
+        .orbit-loader .circle {
+            position: absolute;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            border-top-color: #64ffda;
+            animation: spin 1.2s linear infinite;
+        }
+        
+        .orbit-loader .circle-outer {
+            width: 80px;
+            height: 80px;
+            border-width: 3px;
+        }
+        
+        .orbit-loader .circle-middle {
+            width: 60px;
+            height: 60px;
+            border-width: 3px;
+            top: 10px;
+            left: 10px;
+            border-top-color: #a8edea;
+            animation-duration: 0.9s;
+            animation-direction: reverse;
+        }
+        
+        .orbit-loader .circle-inner {
+            width: 40px;
+            height: 40px;
+            border-width: 3px;
+            top: 20px;
+            left: 20px;
+            border-top-color: #fed6e3;
+            animation-duration: 0.6s;
+        }
+        
+        .orbit-loader .circle-core {
+            width: 20px;
+            height: 20px;
+            background-color: #64ffda;
+            top: 30px;
+            left: 30px;
+            border-radius: 50%;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+        
+        /* Background particles */
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            overflow: hidden;
+        }
+        
+        .particle {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background-color: rgba(100, 255, 218, 0.4);
+            border-radius: 50%;
+        }
+        
+        /* Animations */
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.2);
+                opacity: 0.8;
+            }
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        /* Responsive styles */
+        @media screen and (max-width: 768px) {
+            .logo {
+                font-size: 2rem;
+            }
+            
+            .tagline {
+                font-size: 1rem;
+            }
+            
+            .loading-container {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .orbit-loader {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .orbit-loader .circle-outer {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .orbit-loader .circle-middle {
+                width: 45px;
+                height: 45px;
+                top: 7.5px;
+                left: 7.5px;
+            }
+            
+            .orbit-loader .circle-inner {
+                width: 30px;
+                height: 30px;
+                top: 15px;
+                left: 15px;
+            }
+            
+            .orbit-loader .circle-core {
+                width: 15px;
+                height: 15px;
+                top: 22.5px;
+                left: 22.5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+    
+    <div class="splash-container">
+        <h1 class="logo">Spectrum</h1>
+        <p class="tagline">Creating the extraordinary</p>
+        
+        <div class="loading-container">
+            <div class="orbit-loader">
+                <div class="circle circle-outer"></div>
+                <div class="circle circle-middle"></div>
+                <div class="circle circle-inner"></div>
+                <div class="circle-core"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Create background particles
+            const particlesContainer = document.getElementById('particles');
+            const numberOfParticles = 100;
+            
+            for (let i = 0; i < numberOfParticles; i++) {
+                createParticle(particlesContainer);
+            }
+            
+            // After splash screen delay, you would typically redirect or reveal main content
+            // Uncomment the following to implement a redirect after 5 seconds
+            /*
+            setTimeout(() => {
+                window.location.href = "main.html"; // Redirect to main page
+            }, 5000);
+            */
+        });
+        
+        function createParticle(container) {
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+            
+            // Random position
+            const posX = Math.random() * window.innerWidth;
+            const posY = Math.random() * window.innerHeight;
+            
+            // Random size
+            const size = Math.random() * 4 + 1;
+            
+            // Random opacity
+            const opacity = Math.random() * 0.5 + 0.1;
+            
+            // Random animation duration
+            const animationDuration = Math.random() * 15 + 10;
+            
+            // Set styles
+            particle.style.left = `${posX}px`;
+            particle.style.top = `${posY}px`;
+            particle.style.width = `${size}px`;
+            particle.style.height = `${size}px`;
+            particle.style.opacity = opacity;
+            particle.style.animation = `float ${animationDuration}s ease-in-out infinite`;
+            particle.style.animationDelay = `${Math.random() * 5}s`;
+            
+            container.appendChild(particle);
+            
+            // Start particle motion
+            animateParticle(particle);
+        }
+        
+        function animateParticle(particle) {
+            // Random movement direction and speed
+            const speedX = (Math.random() - 0.5) * 0.3;
+            const speedY = (Math.random() - 0.5) * 0.3;
+            
+            function updatePosition() {
+                const currentX = parseFloat(particle.style.left);
+                const currentY = parseFloat(particle.style.top);
+                
+                // Calculate new position
+                let newX = currentX + speedX;
+                let newY = currentY + speedY;
+                
+                // Boundary check
+                if (newX < 0) newX = window.innerWidth;
+                if (newX > window.innerWidth) newX = 0;
+                if (newY < 0) newY = window.innerHeight;
+                if (newY > window.innerHeight) newY = 0;
+                
+                // Update position
+                particle.style.left = `${newX}px`;
+                particle.style.top = `${newY}px`;
+                
+                // Continue animation
+                requestAnimationFrame(updatePosition);
+            }
+            
+            requestAnimationFrame(updatePosition);
+        }
+    </script>
+</body>
+</html>
